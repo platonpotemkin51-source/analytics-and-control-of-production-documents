@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Склад | WoodFlow{% endblock %}
+{% block content %}
+<section>
+  <h2>Управление складом</h2>
+  <article class="card">
+    <h3>Добавить новую пачку</h3>
+    <form method="post" class="form-grid">
+      <input name="code" placeholder="Код пачки (напр. B-104)" required>
+      <input name="wood_type" placeholder="Порода древесины" required>
+      <input name="quality_grade" placeholder="Сорт" required>
+      <input name="volume_m3" type="number" min="0.1" step="0.1" placeholder="Объем, м³" required>
+      <input name="estimated_value" type="number" min="0" step="1" placeholder="Оценочная стоимость" required>
+      <button type="submit">Добавить на склад</button>
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>Текущие пачки</h3>
+    <table>
+      <thead><tr><th>Код</th><th>Порода</th><th>Сорт</th><th>Объем</th><th>Стоимость</th><th>Статус</th></tr></thead>
+      <tbody>
+      {% for batch in batches %}
+        <tr>
+          <td>{{ batch['code'] }}</td>
+          <td>{{ batch['wood_type'] }}</td>
+          <td>{{ batch['quality_grade'] }}</td>
+          <td>{{ '%.1f'|format(batch['volume_m3']) }}</td>
+          <td>{{ '%.0f'|format(batch['estimated_value']) }} ₽</td>
+          <td><span class="badge {{ batch['status'] }}">{{ 'На складе' if batch['status'] == 'in_stock' else 'Отправлена' }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6">Склад пока пуст.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

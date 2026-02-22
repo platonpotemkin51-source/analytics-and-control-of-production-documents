@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Отправка машин | WoodFlow{% endblock %}
+{% block content %}
+<section>
+  <h2>Формирование машины</h2>
+  <article class="card">
+    <h3>Выберите пачки и заполните данные машины</h3>
+    <form method="post">
+      <div class="checkbox-list">
+        {% for batch in available_batches %}
+          <label>
+            <input type="checkbox" name="batch_ids" value="{{ batch['id'] }}">
+            {{ batch['code'] }} — {{ batch['wood_type'] }} / {{ batch['quality_grade'] }} / {{ '%.1f'|format(batch['volume_m3']) }} м³
+          </label>
+        {% else %}
+          <p>Нет доступных пачек на складе.</p>
+        {% endfor %}
+      </div>
+      <div class="form-grid">
+        <input name="truck_number" placeholder="Номер машины" required>
+        <input name="driver_name" placeholder="ФИО водителя" required>
+        <input name="destination" placeholder="Пункт назначения" required>
+        <input name="shipping_cost" type="number" min="0" step="1" placeholder="Логистика, ₽" required>
+        <input name="sale_value" type="number" min="0" step="1" placeholder="Сумма продажи, ₽" required>
+        <button type="submit">Сформировать отправку</button>
+      </div>
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>Новые отправки</h3>
+    <table>
+      <thead><tr><th>Машина</th><th>Водитель</th><th>Куда</th><th>Объем</th><th>Выручка</th><th>Затраты</th><th>Прибыль</th></tr></thead>
+      <tbody>
+      {% for shipment in shipment_history %}
+        <tr>
+          <td>{{ shipment['truck_number'] }}</td>
+          <td>{{ shipment['driver_name'] }}</td>
+          <td>{{ shipment['destination'] }}</td>
+          <td>{{ '%.1f'|format(shipment['total_volume']) }}</td>
+          <td>{{ '%.0f'|format(shipment['sale_value']) }} ₽</td>
+          <td>{{ '%.0f'|format(shipment['shipping_cost']) }} ₽</td>
+          <td>{{ '%.0f'|format(shipment['profit']) }} ₽</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7">Отправок еще нет.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}

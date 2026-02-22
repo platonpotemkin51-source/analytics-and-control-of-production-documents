@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Архив | WoodFlow{% endblock %}
+{% block content %}
+<section>
+  <h2>Архив отправок</h2>
+  <article class="card">
+    <table>
+      <thead><tr><th>Машина</th><th>Водитель</th><th>Маршрут</th><th>Пачки</th><th>Объем</th><th>Прибыль</th><th>Дата</th></tr></thead>
+      <tbody>
+      {% for item in archived %}
+        <tr>
+          <td>{{ item['truck_number'] }}</td>
+          <td>{{ item['driver_name'] }}</td>
+          <td>{{ item['destination'] }}</td>
+          <td>{{ item['batch_codes'] or '—' }}</td>
+          <td>{{ '%.1f'|format(item['total_volume']) }}</td>
+          <td>{{ '%.0f'|format(item['profit']) }} ₽</td>
+          <td>{{ item['created_at'][:10] }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7">Архив пуст.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}
