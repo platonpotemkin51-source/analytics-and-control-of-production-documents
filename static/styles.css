@@ -1,0 +1,112 @@
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --accent: #154734;
+  --accent-soft: #e6f0ec;
+  --text: #17212b;
+  --muted: #6b7280;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #0f3326 0%, #154734 100%);
+  color: white;
+  padding: 28px 20px;
+}
+.sidebar h1 { margin-top: 0; font-size: 1.5rem; }
+.sidebar nav { display: flex; flex-direction: column; gap: 10px; }
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+.sidebar a:hover { background: rgba(255,255,255,0.15); }
+
+.content { padding: 28px; }
+h2 { margin-top: 0; }
+
+.stats-grid,
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+}
+
+.card h3 { margin-top: 0; margin-bottom: 14px; }
+.card p { font-size: 1.6rem; font-weight: 700; margin: 0; color: var(--accent); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+input, button {
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid #d5dce5;
+  font-family: inherit;
+}
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover { opacity: 0.95; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+th, td {
+  border-bottom: 1px solid #eceff4;
+  text-align: left;
+  padding: 10px 8px;
+}
+th { color: var(--muted); font-weight: 600; }
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.badge.in_stock { background: #e8f5e9; color: #2e7d32; }
+.badge.shipped { background: #e3f2fd; color: #1565c0; }
+
+.checkbox-list {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+  max-height: 180px;
+  overflow-y: auto;
+  background: var(--accent-soft);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+  body { grid-template-columns: 1fr; }
+  .sidebar { display: flex; justify-content: space-between; align-items: center; }
+  .sidebar nav { flex-direction: row; flex-wrap: wrap; }
+}

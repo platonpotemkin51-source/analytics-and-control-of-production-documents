@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Главная | WoodFlow{% endblock %}
+{% block content %}
+<section>
+  <h2>Панель контроля отправок</h2>
+  <div class="stats-grid">
+    <article class="card">
+      <h3>Пачек на складе</h3>
+      <p>{{ overview['in_stock_batches'] }}</p>
+    </article>
+    <article class="card">
+      <h3>Объем на складе (м³)</h3>
+      <p>{{ '%.1f'|format(overview['in_stock_volume']) }}</p>
+    </article>
+    <article class="card">
+      <h3>Общая прибыль</h3>
+      <p>{{ '%.0f'|format(shipment_stats['profit']) }} ₽</p>
+    </article>
+    <article class="card">
+      <h3>Отправлено машин</h3>
+      <p>{{ shipment_stats['total_shipments'] }}</p>
+    </article>
+  </div>
+
+  <div class="charts-grid">
+    <article class="card">
+      <h3>Распределение древесины на складе</h3>
+      <canvas id="woodChart"></canvas>
+    </article>
+    <article class="card">
+      <h3>Прибыль по месяцам</h3>
+      <canvas id="profitChart"></canvas>
+    </article>
+  </div>
+
+  <article class="card">
+    <h3>Последние отправки</h3>
+    <table>
+      <thead><tr><th>Машина</th><th>Куда</th><th>Объем</th><th>Прибыль</th><th>Дата</th></tr></thead>
+      <tbody>
+      {% for ship in recent_shipments %}
+        <tr>
+          <td>{{ ship['truck_number'] }}</td>
+          <td>{{ ship['destination'] }}</td>
+          <td>{{ '%.1f'|format(ship['total_volume']) }}</td>
+          <td>{{ '%.0f'|format(ship['profit']) }} ₽</td>
+          <td>{{ ship['created_at'][:10] }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5">Пока нет отправок.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </article>
+</section>
+<script>
+const woodLabels = {{ wood_breakdown | map(attribute='wood_type') | list | tojson }};
+const woodValues = {{ wood_breakdown | map(attribute='amount') | list | tojson }};
+new Chart(document.getElementById('woodChart'), {
+  type: 'doughnut',
+  data: { labels: woodLabels, datasets: [{ data: woodValues, backgroundColor: ['#154734','#1D6B4A','#2E8B57','#57A773'] }]},
+});
+
+const profitLabels = {{ monthly_profit | map(attribute='month') | list | tojson }};
+const profitValues = {{ monthly_profit | map(attribute='total_profit') | list | tojson }};
+new Chart(document.getElementById('profitChart'), {
+  type: 'line',
+  data: { labels: profitLabels, datasets: [{ label: 'Прибыль', data: profitValues, borderColor: '#154734', tension: 0.3 }]},
+});
+</script>
+{% endblock %}
